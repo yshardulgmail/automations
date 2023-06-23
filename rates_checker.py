@@ -16,16 +16,9 @@ def request_with_retries(method, **kargs):
     while retries < max_retries:
         try:
             resp = requests.request(method=method, **kargs)
-            if resp.status_code == 429 and "Retry-After" in resp.headers:
-                retry_secs = int(resp.headers["Retry-After"])
-                try:
-                    print(f"Got Retry-After header in response. Retrying after {retry_secs}")
-                    time.sleep(retry_secs)
-                except OverflowError as o:
-                    print(f"Got Retry-After header in response. Retrying after {retry_secs}")
-                    time.sleep(4)
 
-            elif resp.status_code == 200:
+
+            if resp.status_code == 200:
                 return resp
             else:
                 raise Exception(f"Status: {resp.status_code}, message: {resp.content}")
@@ -39,7 +32,8 @@ def request_with_retries(method, **kargs):
 
 def get_data_from_url(url):
     proxies = {
-        "http": "http://user:pass@10.10.1.10:3128/"
+        "http": "http://user:pass@10.10.1.10:3128/",
+        "https": "http://user:pass@10.10.1.10:3128/",
     }
     html_text = request_with_retries("GET", url=url, proxies=proxies).text
     with open("rates.html", "w") as rates_fp:
