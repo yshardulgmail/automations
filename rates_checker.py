@@ -38,10 +38,15 @@ def request_with_retries(method, **kargs):
             return resp
 
 def get_data_from_url(url):
-    # html_text = request_with_retries("GET", url=url).text
-    os.system(f"curl {url} -o rates.html")
-    with open("rates.html") as rates_fp:
-        html_text = rates_fp.read()
+    proxies = {
+        "http": "http://user:pass@10.10.1.10:3128/"
+    }
+    html_text = request_with_retries("GET", url=url, proxies=proxies).text
+    with open("rates.html", "w") as rates_fp:
+        rates_fp.write(html_text)
+    # os.system(f"curl {url} -o rates.html")
+    # with open("rates.html") as rates_fp:
+    #     html_text = rates_fp.read()
     soup = BeautifulSoup(html_text, 'html.parser')
     current_rates = {}
 
@@ -68,8 +73,8 @@ def get_data_from_url(url):
 
 def send_mail(current_date):
 
-    mailserver = smtplib.SMTP('mailhost@schwab.com', 25)
-    mailserver.connect('mailhost@schwab.com', 25)
+    mailserver = smtplib.SMTP('mailhost.schwab.com', 25)
+    mailserver.connect('mailhost.schwab.com', 25)
     msg = "Featured mortgage rates date : " + current_date
     mailserver.sendmail('yshardul@gmail.com', f"\n{msg}")
     mailserver.quit()
