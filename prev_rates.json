@@ -1,0 +1,15 @@
+{
+    "date": "11:11 AM EDT 06/22/2023",
+    "rates": {
+        "Jumbo Loans": {
+            "arm": "10 Year ARM",
+            "rate": "6.250%",
+            "rate_apr": "6.913% APR"
+        },
+        "Conforming Loans": {
+            "arm": "10 Year ARM",
+            "rate": "6.750%",
+            "rate_apr": "7.267% APR"
+        }
+    }
+}
