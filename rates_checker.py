@@ -1,3 +1,5 @@
+import os
+
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -36,7 +38,10 @@ def request_with_retries(method, **kargs):
             return resp
 
 def get_data_from_url(url):
-    html_text = request_with_retries("GET", url=url).text
+    # html_text = request_with_retries("GET", url=url).text
+    os.system(f"curl {url} -o rates.html")
+    with open("rates.html") as rates_fp:
+        html_text = rates_fp.read()
     soup = BeautifulSoup(html_text, 'html.parser')
     current_rates = {}
 
